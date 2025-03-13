@@ -9,6 +9,15 @@ public class UserService {
         users.add(new User(userIdCounter++, name, age, email));
     }
 
+    public User readUser(int userId) {
+        for (User user : users) {
+            if (user.getId() == userId) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     public void deleteUser(int id) {
         users.removeIf(user -> user.getId() == id);
     }

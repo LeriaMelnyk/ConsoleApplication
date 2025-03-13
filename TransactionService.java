@@ -9,7 +9,7 @@ public class TransactionService {
     private UserService userService;
     private BookService bookService;
 
-    public TransactionService(UserService userService, BookService bookService) {
+    public TransactionService() {
         this.userService = userService;
         this.bookService = bookService;
     }

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
     private final List<User> users=new ArrayList<>();
@@ -35,5 +36,13 @@ public class UserService {
 
     public List<User> listUsers() {
         return users;
+    }
+
+    public List<User> searchUsers(String keyword) {
+        return users.stream()
+                .filter(user -> user.getName().toLowerCase().contains(keyword.toLowerCase())
+                        || user.getEmail().toLowerCase().contains(keyword.toLowerCase())
+                        || String.valueOf(user.getAge()).equals(keyword))
+                .collect(Collectors.toList());
     }
 }

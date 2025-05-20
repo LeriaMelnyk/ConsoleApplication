@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -8,6 +9,12 @@ public class Main {
         TransactionService transactionService = new TransactionService();
         Scanner scanner = new Scanner(System.in);
         Scanner command = new Scanner(System.in);
+
+        List<Book> books = BookStorage.loadBooksFromFile();
+        for (Book book : books) {
+            bookService.createBook(book.getTitle(), book.getAuthor(), book.getAgeRestriction());
+        }
+
 
         System.out.print(
                 "USERS:\n" +
@@ -24,13 +31,16 @@ public class Main {
                         "7. List of books\n" +
                         "8. Sort books\n" +
 
-
                         "TRANSACTIONS:\n" +
                         "9. New transaction\n" +
                         "10. Search transaction\n" +
                         "11. Update return date\n" +
                         "12. Delete transaction\n" +
-                        "13. List all transactions\n\n"
+                        "13. List all transactions\n\n"+
+
+                        "14. Show JSON contents (books.json)\n"
+
+
         );
 
         System.out.println("Enter command: ");
@@ -153,6 +163,17 @@ public class Main {
                        System.out.println(t);
                    }
                    break;
+                case "14":
+                    List<Book> jsonBooks = BookStorage.loadBooksFromFile();
+                    if (jsonBooks.isEmpty()) {
+                        System.out.println("JSON is empty or file not found.");
+                    } else {
+                        System.out.println("Books from JSON:");
+                        for (Book b : jsonBooks) {
+                            System.out.println(b);
+                        }
+                    }
+                    break;
                 case "exit":
                     System.out.println("Application closed");
                     running = false;
@@ -163,5 +184,8 @@ public class Main {
             }
         }
         command.close();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> BookStorage.saveBooksToFile(bookService.listBooks())));
+
     }
 }
